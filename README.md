@@ -1,4 +1,4 @@
-# hackathon
+# Anemoi Weather Forecast Experiment
 
 A workshop-scale global AI weather-forecasting experiment using Anemoi, ERA5 and a Graph Transformer, carried out by **Muhammed Muhshif Karadan** during BSC’s “Machine Learning for Earth System Modeling: the Anemoi framework”, Barcelona, 28 September–1 October 2026.
 
