@@ -8,7 +8,7 @@ A workshop-scale global AI weather-forecasting experiment using Anemoi, ERA5 and
 
 I configured and constructed the Anemoi dataset from workshop ERA5 inputs, configured and checked the graph, configured the Graph Transformer experiment, ran smoke/benchmark/production training, ran autoregressive inference, evaluated against ERA5 truth and persistence, and produced/interpreted diagnostic figures. These activities are reported by the experiment author; recovered configs, logs and notebook support key parts of the workflow.
 
-Anemoi was developed by its contributors, including ECMWF and partners. BSC supplied workshop templates/helpers, training context and MareNostrum 5 access. I do not claim authorship of Anemoi, ERA5, BSC infrastructure or original workshop code. See [provenance](docs/provenance.md) and [licensing status](LICENSING.md). Publication permission was received from Filippo in the workshop Discord on 2 October 2026, in response to my request to publish this work on GitHub. This permission does not specify an open-source license or grant dataset redistribution rights.
+Anemoi was developed by its contributors, including ECMWF and partners. BSC supplied workshop templates/helpers, training context and MareNostrum 5 access. I do not claim authorship of Anemoi, ERA5, BSC infrastructure or original workshop code. See [provenance](docs/provenance.md) and [licensing status](LICENSING.md). The experiment author received permission from the workshop organizers to publish this work on GitHub. No repository-wide open-source license or dataset redistribution rights are inferred from that permission.
 
 ## Experiment summary
 
@@ -70,7 +70,7 @@ No ERA5/BSC input data, Zarr stores, checkpoint, graph binaries or forecast NetC
 
 ## Dataset availability notice
 
-The dataset used in this experiment is not currently available in this GitHub repository. If redistribution is permitted and a suitable archive can be prepared, I intend to provide a Zenodo link in a future update. No release date is confirmed. Thank you for your understanding.
+The dataset used in this experiment is not currently available in this GitHub repository. The workshop organizers have indicated that they plan to release workshop materials through GitHub and data through Zenodo. I intend to add the official links once they are available and confirm whether the released data support this experiment. No release date or exact dataset coverage is confirmed. Thank you for your understanding.
 
 ## Acknowledgements
 
