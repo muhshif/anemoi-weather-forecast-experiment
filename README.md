@@ -2,6 +2,8 @@
 
 A workshop-scale global AI weather-forecasting experiment using Anemoi, ERA5 and a Graph Transformer, carried out by **Muhammed Muhshif Karadan** during BSC’s “Machine Learning for Earth System Modeling: the Anemoi framework”, Barcelona, 28 September–1 October 2026.
 
+This experiment was completed during the hands-on hackathon session of the BSC Anemoi training workshop. Configuration filenames retain the workshop’s `hackathon` naming convention.
+
 **Purpose:** gain practical experience with dataset construction, graph configuration, GPU training, autoregressive inference and forecast verification. This is a small educational experiment and a single-case evaluation, not an operational forecasting system.
 
 ## Contribution and attribution
