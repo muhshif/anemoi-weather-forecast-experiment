@@ -1,0 +1,22 @@
+# anemoi-inference config for the hackathon notebook.
+
+checkpoint: ${oc.env:ANEMOI_CHECKPOINT}
+
+# Latest input time
+date: 2014-06-15T00:00:00
+
+# Hours to forecast
+lead_time: 24
+
+input:
+  dataset: ${oc.env:ANEMOI_DATASET}
+
+output:
+  netcdf:
+    path: ${oc.env:ANEMOI_OUTPUT}/forecast.nc
+    variables: [2t, msl, 10u, 10v, tp, z_500, t_850]
+
+write_initial_state: false
+device: cuda
+precision: "32"
+allow_nans: false

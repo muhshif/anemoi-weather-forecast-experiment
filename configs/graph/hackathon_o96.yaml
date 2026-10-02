@@ -1,0 +1,62 @@
+# Graph for your hackathon O96 dataset. 
+# Every `???` is a value you must fill in.
+overwrite: false
+
+data: "data"
+hidden: "hidden"
+
+nodes:
+  # Data nodes: one per grid point of your dataset
+  data:
+    node_builder:
+      _target_: anemoi.graphs.nodes.AnemoiDatasetNodes
+      # TODO: path to your dataset zarr
+      dataset: ${oc.env:ANEMOI_DATASET}
+    attributes:
+      # area of the grid cell around each point, used to weight the loss (see training/scalers/hackathon.yaml)
+      area_weight:
+        _target_: anemoi.graphs.nodes.attributes.SphericalAreaWeights
+        norm: unit-max
+        fill_value: 0
+  # Hidden nodes: the coarser mesh on which the processor runs. HEALPix covers the sphere with
+  # 12 * 4**resolution equal-area cells, one node per cell.
+  hidden:
+    node_builder:
+      _target_: anemoi.graphs.nodes.HEALPixNodes
+      # TODO: resolution 4 -> 3,072 hidden nodes, 5 -> 12,288. How many data nodes does O96 have? How many
+      # data nodes per hidden node does each choice give, and what does it change for speed and detail?
+      resolution: 4
+
+edges:
+  # Encoder
+  - source_name: data
+    target_name: hidden
+    edge_builders:
+      - _target_: anemoi.graphs.edges.CutOffEdges
+        # TODO: every data node must reach at least one hidden node, otherwise its values never enter the
+        # model. The graph job prints "Data nodes not connected to the encoder: N": start from 0.6 and
+        # increase until N is 0 (larger = more edges = slower).
+        cutoff_factor: 0.72
+    attributes: &edge_attributes
+      edge_length:
+        _target_: anemoi.graphs.edges.attributes.EdgeLength
+        norm: unit-std
+      edge_dirs:
+        _target_: anemoi.graphs.edges.attributes.EdgeDirection
+        norm: unit-std
+  # Processor
+  - source_name: hidden
+    target_name: hidden
+    edge_builders:
+      - _target_: anemoi.graphs.edges.KNNEdges
+        num_nearest_neighbours: 8
+    attributes: *edge_attributes
+  # Decoder
+  - source_name: hidden
+    target_name: data
+    edge_builders:
+      - _target_: anemoi.graphs.edges.KNNEdges
+        num_nearest_neighbours: 3
+    attributes: *edge_attributes
+
+post_processors: []

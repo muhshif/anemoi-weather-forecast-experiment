@@ -1,0 +1,166 @@
+# Hackathon training config: a deterministic 6h forecaster on your hackathon ERA5 O96 dataset.
+# Only the choices that differ from the anemoi-training defaults are written here; everything else comes
+# from the config groups listed in `defaults`.
+
+defaults:
+  - data: zarr
+  - dataloader: native_grid
+  - diagnostics: evaluation
+  - system: example
+  - model: graphtransformer
+  - task: forecaster
+  - training: single
+  - graph: hackathon_o96
+  - override training/scalers: hackathon # local file: training/scalers/hackathon.yaml
+  - _self_
+
+config_validation: True
+
+system:
+  input:
+    dataset: ${oc.env:ANEMOI_DATASET}
+    graph: ${oc.env:ANEMOI_GRAPH}
+  output:
+    root: ${oc.env:ANEMOI_RUNS}
+  hardware:
+    accelerator: gpu
+    num_nodes: 1
+    num_gpus_per_node: 1
+    num_gpus_per_model: 1
+
+data:
+  frequency: 6h
+  datasets:
+    data:
+      forcing:
+        - cos_julian_day
+        - cos_latitude
+        - cos_local_time
+        - cos_longitude
+        - insolation
+        - sin_julian_day
+        - sin_latitude
+        - sin_local_time
+        - sin_longitude
+      diagnostic:
+        - tp
+      processors:
+        normalizer:
+          config:
+            default: mean-std
+            std: [tp]
+            max: []
+            none:
+              - cos_julian_day
+              - cos_latitude
+              - cos_local_time
+              - cos_longitude
+              - insolation
+              - sin_julian_day
+              - sin_latitude
+              - sin_local_time
+              - sin_longitude
+
+dataloader:
+  num_workers:
+    training: 8
+    validation: 4
+    test: 4
+  batch_size:
+    training: 2
+    validation: 2
+    test: 2
+
+  # 2010-2013: model training
+  # 2014: internal validation
+  # 2015: held aside by the teachers for final evaluation
+  training:
+    datasets:
+      data:
+        start: 2010-01-01
+        end: 2013-12-31
+  validation:
+    datasets:
+      data:
+        start: 2014-01-01
+        end: 2014-12-31
+  test:
+    datasets:
+      data:
+        start: ${dataloader.validation.datasets.data.start}
+        end: ${dataloader.validation.datasets.data.end}
+  limit_batches:
+    validation: 20
+
+task:
+  multistep_input: 2
+  multistep_output: 1
+  timestep: 6h
+  rollout:
+    start: 1
+    maximum: 1
+    epoch_increment: 0
+  validation_rollout: 1
+
+model:
+  # Lightweight starting point for the one-GPU hackathon run.
+  num_channels: 128
+  compile: []
+  processor:
+    num_layers: 4
+    num_chunks: 2
+    num_heads: 8
+    graph_attention_backend: pyg
+  encoder:
+    num_heads: 8
+    graph_attention_backend: pyg
+  decoder:
+    num_heads: 8
+    graph_attention_backend: pyg
+  bounding:
+    - _target_: anemoi.models.layers.bounding.ReluBounding
+      variables: [tp]
+
+training:
+  precision: 16-mixed
+  max_epochs: null
+
+  # Smoke test only. Increase after checking training throughput.
+  max_steps: 20
+
+  optimization:
+    lr: 6.25e-4
+    lr_scheduler:
+      warmup_t: 500
+
+  variable_groups:
+    datasets:
+      data:
+        default: sfc
+        pl:
+          param: [q, t, u, v, z]
+
+  metrics:
+    datasets:
+      data: [z_500, t_850, u_850, v_850, 2t, msl, tp]
+
+diagnostics:
+  plot:
+    callbacks: []
+  enable_progress_bar: False
+  checkpoint:
+    every_n_minutes:
+      save_frequency: 20
+      num_models_saved: 1
+    every_n_epochs:
+      save_frequency: 1
+      num_models_saved: 1
+  log:
+    interval: 50
+    mlflow:
+      enabled: True
+      offline: True
+      tracking_uri: null
+      experiment_name: hackathon
+      terminal: True
+      system: True

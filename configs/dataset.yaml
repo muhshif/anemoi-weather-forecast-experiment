@@ -1,0 +1,219 @@
+# -----------------------------------------------------------------------------
+# Hackathon recipe: ERA5 2010-2014 -> O96
+# -----------------------------------------------------------------------------
+
+name: karadan-dataset-2010-2014-6h-v1
+
+description: >
+  ERA5 2010-2014 from 1x1 NetCDF files, interpolated to O96.
+  Surface fields + pressure-level fields + 6-hour accumulated precipitation
+  + forcings, at 6-hourly frequency.
+
+attribution: ECMWF/C3S
+
+dates:
+  start: 2010-01-01T00:00:00
+  end: 2014-12-31T18:00:00
+  frequency: 6h
+
+build:
+  group_by: monthly
+
+input:
+  join:
+
+    # -------------------------------------------------------------------------
+    # Meteorological fields: concatenate the five yearly pipelines
+    # -------------------------------------------------------------------------
+
+    - pipe:
+
+        - concat:
+
+            # =================================================================
+            # 2010
+            # =================================================================
+            - dates:
+                start: 2010-01-01T00:00:00
+                end: 2010-12-31T18:00:00
+                frequency: 6h
+
+              join:
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/pl/hackathon-ea-an-oper-0001-mars-ll1x1-201001-201012-6h_pl.nc
+                    options:
+                      drop_variables: [expver]
+
+                - pipe:
+                    - netcdf:
+                        path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201001-201012-6h_sfc.nc
+                        options:
+                          drop_variables: [expver]
+
+                    - rename:
+                        param:
+                          u10: 10u
+                          v10: 10v
+                          d2m: 2d
+                          t2m: 2t
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201001-201012-6h_acc.nc
+
+
+            # =================================================================
+            # 2011
+            # =================================================================
+            - dates:
+                start: 2011-01-01T00:00:00
+                end: 2011-12-31T18:00:00
+                frequency: 6h
+
+              join:
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/pl/hackathon-ea-an-oper-0001-mars-ll1x1-201101-201112-6h_pl.nc
+                    options:
+                      drop_variables: [expver]
+
+                - pipe:
+                    - netcdf:
+                        path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201101-201112-6h_sfc.nc
+                        options:
+                          drop_variables: [expver]
+
+                    - rename:
+                        param:
+                          u10: 10u
+                          v10: 10v
+                          d2m: 2d
+                          t2m: 2t
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201101-201112-6h_acc.nc
+
+
+            # =================================================================
+            # 2012
+            # =================================================================
+            - dates:
+                start: 2012-01-01T00:00:00
+                end: 2012-12-31T18:00:00
+                frequency: 6h
+
+              join:
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/pl/hackathon-ea-an-oper-0001-mars-ll1x1-201201-201212-6h_pl.nc
+                    options:
+                      drop_variables: [expver]
+
+                - pipe:
+                    - netcdf:
+                        path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201201-201212-6h_sfc.nc
+                        options:
+                          drop_variables: [expver]
+
+                    - rename:
+                        param:
+                          u10: 10u
+                          v10: 10v
+                          d2m: 2d
+                          t2m: 2t
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201201-201212-6h_acc.nc
+
+
+            # =================================================================
+            # 2013
+            # =================================================================
+            - dates:
+                start: 2013-01-01T00:00:00
+                end: 2013-12-31T18:00:00
+                frequency: 6h
+
+              join:
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/pl/hackathon-ea-an-oper-0001-mars-ll1x1-201301-201312-6h_pl.nc
+                    options:
+                      drop_variables: [expver]
+
+                - pipe:
+                    - netcdf:
+                        path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201301-201312-6h_sfc.nc
+                        options:
+                          drop_variables: [expver]
+
+                    - rename:
+                        param:
+                          u10: 10u
+                          v10: 10v
+                          d2m: 2d
+                          t2m: 2t
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201301-201312-6h_acc.nc
+
+
+            # =================================================================
+            # 2014
+            # =================================================================
+            - dates:
+                start: 2014-01-01T00:00:00
+                end: 2014-12-31T18:00:00
+                frequency: 6h
+
+              join:
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/pl/hackathon-ea-an-oper-0001-mars-ll1x1-201401-201412-6h_pl.nc
+                    options:
+                      drop_variables: [expver]
+
+                - pipe:
+                    - netcdf:
+                        path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201401-201412-6h_sfc.nc
+                        options:
+                          drop_variables: [expver]
+
+                    - rename:
+                        param:
+                          u10: 10u
+                          v10: 10v
+                          d2m: 2d
+                          t2m: 2t
+
+                - netcdf:
+                    path: ${oc.env:ERA5_INPUT_ROOT}/sl/hackathon-ea-an-oper-0001-mars-ll1x1-201401-201412-6h_acc.nc
+
+
+        # ---------------------------------------------------------------------
+        # Regrid whichever yearly fields were selected above to O96
+        # ---------------------------------------------------------------------
+
+        - regrid:
+            method: nearest
+            in_grid: [1, 1]
+            out_grid: O96
+
+
+    # -------------------------------------------------------------------------
+    # Forcings
+    # -------------------------------------------------------------------------
+
+    - constants:
+        param:
+          - cos_latitude
+          - cos_longitude
+          - sin_latitude
+          - sin_longitude
+          - cos_julian_day
+          - cos_local_time
+          - sin_julian_day
+          - sin_local_time
+          - insolation
+
+        template: ${input.join.0.pipe}
