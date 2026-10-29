@@ -10,7 +10,7 @@ This experiment was completed during the hands-on hackathon session of the BSC A
 
 I configured and constructed the Anemoi dataset from workshop ERA5 inputs, configured and checked the graph, configured the Graph Transformer experiment, ran smoke/benchmark/production training, ran autoregressive inference, evaluated against ERA5 truth and persistence, and produced/interpreted diagnostic figures. These activities are reported by the experiment author; recovered configs, logs and notebook support key parts of the workflow.
 
-Anemoi was developed by its contributors, including ECMWF and partners. BSC supplied workshop templates/helpers, training context and MareNostrum 5 access. I do not claim authorship of Anemoi, ERA5, BSC infrastructure or original workshop code. See [provenance](docs/provenance.md) and [licensing status](LICENSING.md). The experiment author received permission from the workshop organizers to publish this work on GitHub. No repository-wide open-source license or dataset redistribution rights are inferred from that permission.
+Anemoi was developed by its contributors, including ECMWF and partners. BSC supplied workshop templates/helpers, training context and MareNostrum 5 access. I do not claim authorship of Anemoi, ERA5, BSC infrastructure or original workshop code. See [provenance](docs/provenance.md) and [licensing status](LICENSING.md). The experiment author received permission from the workshop organizers to publish this work on GitHub. The [official workshop repository](https://github.com/BSC-ES/AIF-Training-ML-for-ESM-and-Anemoi) now documents the upstream code and data licenses; see the licensing note for scope.
 
 ## Experiment summary
 
@@ -70,9 +70,15 @@ Only one initialization was evaluated, within the internal validation year. This
 
 No ERA5/BSC input data, Zarr stores, checkpoint, graph binaries or forecast NetCDF are distributed. Reproduction requires compatible external inputs, software, graph and weights. See [reproduction prerequisites and recovered commands](docs/reproducibility.md) and [environment evidence](environment/README.md). The cleaned workflow has not been rerun here and is not claimed to be immediately runnable on a Mac.
 
-## Dataset availability notice
+## Data availability and official workshop materials
 
-The dataset used in this experiment is not currently available in this GitHub repository. The workshop organizers have indicated that they plan to release workshop materials through GitHub and data through Zenodo. I intend to add the official links once they are available and confirm whether the released data support this experiment. No release date or exact dataset coverage is confirmed. Thank you for your understanding.
+The organizers now publish the workshop's **ERA5 hackathon source inputs (2010–2015)** through **[Zenodo: 10.5281/zenodo.23099731](https://doi.org/10.5281/zenodo.23099731)**. According to the [official data instructions](https://github.com/BSC-ES/AIF-Training-ML-for-ESM-and-Anemoi#hackathon-data), download `pl.zip` and `sl.zip`; they contain yearly pressure-level, surface and six-hour accumulated precipitation NetCDF files on the original 1° regular latitude–longitude grid.
+
+This experiment uses the **2010–2014 subset** to construct its O96 Anemoi dataset, with the split listed above. The availability of 2015 in the public archive does not change the original training/validation split or imply that this project evaluated 2015. The published source inputs have not been downloaded or checked byte-for-byte against the original workshop inputs for this repository.
+
+The generated O96 Zarr store, trained checkpoint, final graph and forecast NetCDF remain outside this repository. See [reproduction instructions](docs/reproducibility.md) for how the released input layout maps to the recipe.
+
+**For the full course, original notebooks, reference configurations, setup instructions and further resources, visit the [BSC organizers’ repository](https://github.com/BSC-ES/AIF-Training-ML-for-ESM-and-Anemoi).** Use the hackathon record above for this experiment; the separate course/demo data record serves other workshop exercises. Retain ECMWF/C3S attribution and follow the license and notices on the official records.
 
 ## Acknowledgements
 
